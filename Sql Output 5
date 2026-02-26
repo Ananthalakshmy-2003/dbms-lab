@@ -1,0 +1,179 @@
+mysql> use test;
+ERROR 1049 (42000): Unknown database 'test'
+mysql> use test1;
+Reading table information for completion of table and column names
+You can turn off this feature to get a quicker startup with -A
+
+Database changed
+mysql> show tables;
++-----------------+
+| Tables_in_test1 |
++-----------------+
+| department      |
+| employee        |
++-----------------+
+2 rows in set (0.00 sec)
+
+mysql> select * from employee;
++--------+----------+---------+---------+--------+--------------+
+| emp_id | emp_name | design  | dept_id | salary | joining_date |
++--------+----------+---------+---------+--------+--------------+
+|    110 | anitta   | typist  |       1 |  10000 | 2000-03-02   |
+|    111 | veena    | analyst |       2 |  28000 | 2000-02-02   |
+|    112 | mariya   | manager |       3 |  40000 | 2001-03-02   |
+|    113 | geethu   | typist  |       4 |   5000 | 2001-02-03   |
+|    114 | joseph   | clerk   |       3 |  20000 | 2002-02-03   |
+|    115 | alen     | manager |       2 | 420000 | 2000-02-03   |
+|    116 | anu      | analyst |       1 |  30000 | 2000-03-02   |
++--------+----------+---------+---------+--------+--------------+
+7 rows in set (0.00 sec)
+
+mysql> select * from department;
++---------+-----------+
+| dept_id | dept_name |
++---------+-----------+
+|       1 | HR        |
+|       2 | IT        |
+|       3 | finance   |
+|       4 | admin     |
+|       5 | sales     |
++---------+-----------+
+5 rows in set (0.00 sec)
+
+mysql> select dept_id,count(*) as number_of_dept_employees from employee group by dept_id having(*)
+    -> ^C
+mysql> select dept_id,count(*) as number_of_dept_employees from employee group by dept_id having(*)>2;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '*)>2' at line 1
+mysql> select dept_id,count(*) as number_of_dept_employees from employee group by dept_id havingcount(*)>2;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'havingcount(*)>2' at line 1
+mysql> select dept_id,count(*) as number_of_dept_employees from employee group by dept_id having count(*)>2;
+Empty set (0.00 sec)
+
+mysql> select dept_id.min(salary)as lowest_salary from employee group by dept_id;
+ERROR 1630 (42000): FUNCTION dept_id.min does not exist. Check the 'Function Name Parsing and Resolution' section in the Reference Manual
+mysql> select dept_id,min(salary)as lowest_salary from employee group by dept_id;
++---------+---------------+
+| dept_id | lowest_salary |
++---------+---------------+
+|       1 |         10000 |
+|       2 |         28000 |
+|       3 |         20000 |
+|       4 |          5000 |
++---------+---------------+
+4 rows in set (0.00 sec)
+
+mysql> select dept_id,emp_name from employee e where salary=(select MAX(salary)from employee where dept_id=e.dept_id;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 1
+mysql> select dept_id,emp_name from employee e where salary=(select MAX(salary)from employee where dept_id=e.dept_id);
++---------+----------+
+| dept_id | emp_name |
++---------+----------+
+|       3 | mariya   |
+|       4 | geethu   |
+|       2 | alen     |
+|       1 | anu      |
++---------+----------+
+4 rows in set (0.00 sec)
+
+mysql> select emp_name from employee where year(joining_date)=2000;
++----------+
+| emp_name |
++----------+
+| anitta   |
+| veena    |
+| alen     |
+| anu      |
++----------+
+4 rows in set (0.00 sec)
+
+mysql> select emp_name from employee where year(joining_date)=8;
+Empty set (0.01 sec)
+
+mysql> select emp_name from employee where year(joining_date)=2;
+Empty set (0.00 sec)
+
+mysql> select emp_name from employee where month(joining_date)=2;
++----------+
+| emp_name |
++----------+
+| veena    |
+| geethu   |
+| joseph   |
+| alen     |
++----------+
+4 rows in set (0.00 sec)
+
+mysql> select*from department d where not exists(select 1 from employee e where e.dept_id=d.dept_id);
++---------+-----------+
+| dept_id | dept_name |
++---------+-----------+
+|       5 | sales     |
++---------+-----------+
+1 row in set (0.00 sec)
+
+mysql> insert into employee values(20,'rahul','clerk',null,15000,'2004-02-03');
+Query OK, 1 row affected (0.01 sec)
+
+mysql> select*from employee;
++--------+----------+---------+---------+--------+--------------+
+| emp_id | emp_name | design  | dept_id | salary | joining_date |
++--------+----------+---------+---------+--------+--------------+
+|     20 | rahul    | clerk   |    NULL |  15000 | 2004-02-03   |
+|    110 | anitta   | typist  |       1 |  10000 | 2000-03-02   |
+|    111 | veena    | analyst |       2 |  28000 | 2000-02-02   |
+|    112 | mariya   | manager |       3 |  40000 | 2001-03-02   |
+|    113 | geethu   | typist  |       4 |   5000 | 2001-02-03   |
+|    114 | joseph   | clerk   |       3 |  20000 | 2002-02-03   |
+|    115 | alen     | manager |       2 | 420000 | 2000-02-03   |
+|    116 | anu      | analyst |       1 |  30000 | 2000-03-02   |
++--------+----------+---------+---------+--------+--------------+
+8 rows in set (0.00 sec)
+
+mysql> select d.dept_name,e.emp_name from department d left join employee e on d.dept_id=e.dept_id;
++-----------+----------+
+| dept_name | emp_name |
++-----------+----------+
+| HR        | anitta   |
+| HR        | anu      |
+| IT        | veena    |
+| IT        | alen     |
+| finance   | mariya   |
+| finance   | joseph   |
+| admin     | geethu   |
+| sales     | NULL     |
++-----------+----------+
+8 rows in set (0.00 sec)
+
+mysql> select e.emp_name,d.dept_name from employee e left join department d on e.dept_id=d.dept_id;
++----------+-----------+
+| emp_name | dept_name |
++----------+-----------+
+| rahul    | NULL      |
+| anitta   | HR        |
+| veena    | IT        |
+| mariya   | finance   |
+| geethu   | admin     |
+| joseph   | finance   |
+| alen     | IT        |
+| anu      | HR        |
++----------+-----------+
+8 rows in set (0.01 sec)
+
+mysql> select emp_name,COALESCE(dept_id,o)as dept_id from employee;
+ERROR 1054 (42S22): Unknown column 'o' in 'field list'
+mysql> select emp_name,COALESCE(dept_id,0)as dept_id from employee;
++----------+---------+
+| emp_name | dept_id |
++----------+---------+
+| rahul    |       0 |
+| anitta   |       1 |
+| veena    |       2 |
+| mariya   |       3 |
+| geethu   |       4 |
+| joseph   |       3 |
+| alen     |       2 |
+| anu      |       1 |
++----------+---------+
+8 rows in set (0.01 sec)
+
+
