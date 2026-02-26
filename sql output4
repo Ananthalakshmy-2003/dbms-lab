@@ -1,0 +1,173 @@
+
+mysql> create database tcl;
+Query OK, 1 row affected (0.02 sec)
+
+mysql> use tcl;
+Database changed
+mysql> create table order_details(order_id int(10),product_name varchar(50),order_no int(10
+    -> ^C
+mysql> create table order_details(order_id int(10),product_name varchar(50),order_no int(10),order_date date);
+Query OK, 0 rows affected, 2 warnings (0.05 sec)
+
+mysql> insert into order_details values(1,'laptop',234,'2000-03-02'),(2,'desktop',456,'2001-02-03'),(3,'keyboard',457,'2000-02-02'),(4,'mouse',500,'2001-02-02'),(5,'antivirus',50,'2002-03-02');
+Query OK, 5 rows affected (0.03 sec)
+Records: 5  Duplicates: 0  Warnings: 0
+
+mysql> START TRANSACTION;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> insert into order_details values(6,'printer',601,'2004-03-02');
+Query OK, 1 row affected (0.00 sec)
+
+mysql> insert into order_details values(6,'scanner',600,'2003-03-02');
+Query OK, 1 row affected (0.00 sec)
+
+mysql> select*from order_details;
++----------+--------------+----------+------------+
+| order_id | product_name | order_no | order_date |
++----------+--------------+----------+------------+
+|        1 | laptop       |      234 | 2000-03-02 |
+|        2 | desktop      |      456 | 2001-02-03 |
+|        3 | keyboard     |      457 | 2000-02-02 |
+|        4 | mouse        |      500 | 2001-02-02 |
+|        5 | antivirus    |       50 | 2002-03-02 |
+|        6 | printer      |      601 | 2004-03-02 |
+|        6 | scanner      |      600 | 2003-03-02 |
++----------+--------------+----------+------------+
+7 rows in set (0.00 sec)
+
+mysql> ROLLBACK;
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> select * from order_details;
++----------+--------------+----------+------------+
+| order_id | product_name | order_no | order_date |
++----------+--------------+----------+------------+
+|        1 | laptop       |      234 | 2000-03-02 |
+|        2 | desktop      |      456 | 2001-02-03 |
+|        3 | keyboard     |      457 | 2000-02-02 |
+|        4 | mouse        |      500 | 2001-02-02 |
+|        5 | antivirus    |       50 | 2002-03-02 |
++----------+--------------+----------+------------+
+5 rows in set (0.00 sec)
+
+mysql> START TRANSACTION;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> delete from order_details where order_id in(4,5);
+Query OK, 2 rows affected (0.00 sec)
+
+mysql> select*from order-details;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'order-details' at line 1
+mysql> select*from order_details;
++----------+--------------+----------+------------+
+| order_id | product_name | order_no | order_date |
++----------+--------------+----------+------------+
+|        1 | laptop       |      234 | 2000-03-02 |
+|        2 | desktop      |      456 | 2001-02-03 |
+|        3 | keyboard     |      457 | 2000-02-02 |
++----------+--------------+----------+------------+
+3 rows in set (0.00 sec)
+
+mysql> COMMIT;
+Query OK, 0 rows affected (0.03 sec)
+
+mysql> select*from order_details;
++----------+--------------+----------+------------+
+| order_id | product_name | order_no | order_date |
++----------+--------------+----------+------------+
+|        1 | laptop       |      234 | 2000-03-02 |
+|        2 | desktop      |      456 | 2001-02-03 |
+|        3 | keyboard     |      457 | 2000-02-02 |
++----------+--------------+----------+------------+
+3 rows in set (0.00 sec)
+
+mysql> SET AUTOCOMMIT=0;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> SAVEPOINT svp_update;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> update order_details set product_name='gaming keyboard' where order_no=457;
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> insert into order_details values(8,'tablet',602,'2005-02-03'),(9,'samartphone',603,'2006-03-02');
+Query OK, 2 rows affected (0.00 sec)
+Records: 2  Duplicates: 0  Warnings: 0
+
+mysql> SAVEPOINT delt;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> delete from order-details where product_name='desktop';
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'order-details where product_name='desktop'' at line 1
+mysql> delete from order_details where product_name='desktop';
+Query OK, 1 row affected (0.00 sec)
+
+mysql> select*from order_details;
++----------+-----------------+----------+------------+
+| order_id | product_name    | order_no | order_date |
++----------+-----------------+----------+------------+
+|        1 | laptop          |      234 | 2000-03-02 |
+|        3 | gaming keyboard |      457 | 2000-02-02 |
+|        8 | tablet          |      602 | 2005-02-03 |
+|        9 | samartphone     |      603 | 2006-03-02 |
++----------+-----------------+----------+------------+
+4 rows in set (0.00 sec)
+
+mysql> ROLLBACK TO delt;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> select*from order_details;
++----------+-----------------+----------+------------+
+| order_id | product_name    | order_no | order_date |
++----------+-----------------+----------+------------+
+|        1 | laptop          |      234 | 2000-03-02 |
+|        2 | desktop         |      456 | 2001-02-03 |
+|        3 | gaming keyboard |      457 | 2000-02-02 |
+|        8 | tablet          |      602 | 2005-02-03 |
+|        9 | samartphone     |      603 | 2006-03-02 |
++----------+-----------------+----------+------------+
+5 rows in set (0.00 sec)
+
+mysql> ROLLBACK TO svp_update;
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> select*from order_details;
++----------+--------------+----------+------------+
+| order_id | product_name | order_no | order_date |
++----------+--------------+----------+------------+
+|        1 | laptop       |      234 | 2000-03-02 |
+|        2 | desktop      |      456 | 2001-02-03 |
+|        3 | keyboard     |      457 | 2000-02-02 |
++----------+--------------+----------+------------+
+3 rows in set (0.00 sec)
+
+mysql> COMMIT;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> create USER 'user1'@'localhost' identified by '1234';
+Query OK, 0 rows affected (0.04 sec)
+
+mysql> grant all privileges on order-details to 'user1'@'localhost';
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'order-details to 'user1'@'localhost'' at line 1
+mysql> grant all privileges on order_details to 'user1'@'localhost';
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> show grant for 'user1'@'localhost';
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'grant for 'user1'@'localhost'' at line 1
+mysql> show grants for 'user1'@'localhost';
++----------------------------------------------------------------------+
+| Grants for user1@localhost                                           |
++----------------------------------------------------------------------+
+| GRANT USAGE ON *.* TO `user1`@`localhost`                            |
+| GRANT ALL PRIVILEGES ON `tcl`.`order_details` TO `user1`@`localhost` |
++----------------------------------------------------------------------+
+2 rows in set (0.00 sec)
+
+mysql> revoke insert,delete on order_details from 'user1'@'localhost';
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> 
+
+

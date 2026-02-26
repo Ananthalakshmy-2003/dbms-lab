@@ -1,0 +1,350 @@
+
+mysql> create database tables;
+Query OK, 1 row affected (0.01 sec)
+
+mysql> use tables;
+Database changed
+mysql> create table persons(person_id int(10) primary key,name varchar(50) not null unique,age check(age>18));
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'check(age>18))' at line 1
+mysql> create table persons(person_id int(10) primary key,name varchar(50) not null unique,age int check(age>18));
+Query OK, 0 rows affected, 1 warning (0.05 sec)
+
+mysql> alter table persons add aadhar_id varchar(12) not null unique;
+Query OK, 0 rows affected (0.09 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> create table order(order_id int(10) primary key,order_no varchar(10) not null,person_id  int(10), foreign key(person_id)references person(person_id));
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'order(order_id int(10) primary key,order_no varchar(10) not null,person_id  int(' at line 1
+mysql> create table order(order_id int(10) primary key,order_no varchar(10) not null,person_id  int(10), foreign key(person_id) references person(person_id));
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'order(order_id int(10) primary key,order_no varchar(10) not null,person_id  int(' at line 1
+mysql> create table order(order_id int(10) primary key,order_no Varchar(10) not null,person_id  int(10), foreign key(person_id) references person(person_id));
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'order(order_id int(10) primary key,order_no Varchar(10) not null,person_id  int(' at line 1
+mysql> create table order(order_id int(10) primary key,order_no Varchar(10) not null,person_id  int(10),foreign key(person_id) REFERENCES person(person_id));
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'order(order_id int(10) primary key,order_no Varchar(10) not null,person_id  int(' at line 1
+mysql> create table order(order_id int(10) primary key,order_no Varchar(10) NOT NULL,person_id  int(10),foreign key(person_id) REFERENCES person(person_id));
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'order(order_id int(10) primary key,order_no Varchar(10) NOT NULL,person_id  int(' at line 1
+mysql> create table order(order_id int(10) primary key,order_no Varchar(10) NOT NULL,person_id  int(10) NOT NULL,foreign key(person_id) REFERENCES person(person_id));
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'order(order_id int(10) primary key,order_no Varchar(10) NOT NULL,person_id  int(' at line 1
+mysql> create table order(order_id int(10) primary key,order_no Varchar(10) NOT NULL,person_id  int(10) NOT NULL,foreign key(person_id) REFERENCES persons(person_id));
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'order(order_id int(10) primary key,order_no Varchar(10) NOT NULL,person_id  int(' at line 1
+mysql> create table orders(order_id int(10) primary key,order_no Varchar(10) NOT NULL,person_id  int(10) NOT NULL,foreign key(person_id) REFERENCES persons(person_id));
+Query OK, 0 rows affected, 2 warnings (0.06 sec)
+
+mysql> DESC persons;
++-----------+-------------+------+-----+---------+-------+
+| Field     | Type        | Null | Key | Default | Extra |
++-----------+-------------+------+-----+---------+-------+
+| person_id | int         | NO   | PRI | NULL    |       |
+| name      | varchar(50) | NO   | UNI | NULL    |       |
+| age       | int         | YES  |     | NULL    |       |
+| aadhar_id | varchar(12) | NO   | UNI | NULL    |       |
++-----------+-------------+------+-----+---------+-------+
+4 rows in set (0.00 sec)
+
+mysql> disc orders;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'disc orders' at line 1
+mysql> DESC orders;
++-----------+-------------+------+-----+---------+-------+
+| Field     | Type        | Null | Key | Default | Extra |
++-----------+-------------+------+-----+---------+-------+
+| order_id  | int         | NO   | PRI | NULL    |       |
+| order_no  | varchar(10) | NO   |     | NULL    |       |
+| person_id | int         | NO   | MUL | NULL    |       |
++-----------+-------------+------+-----+---------+-------+
+3 rows in set (0.00 sec)
+
+mysql> use office;
+Reading table information for completion of table and column names
+You can turn off this feature to get a quicker startup with -A
+
+Database changed
+mysql> use tables;
+Reading table information for completion of table and column names
+You can turn off this feature to get a quicker startup with -A
+
+Database changed
+mysql> create table employees(employee_no varchar(10) primary key,employee_name varchar(20),place varchar(100),phone_no int(10),department_name varchar(100),job_id int(10),salary int(10));
+Query OK, 0 rows affected, 3 warnings (0.05 sec)
+
+mysql> create table department(department_no int(10),employee_no int(10),employee_name varchar(20));
+Query OK, 0 rows affected, 2 warnings (0.05 sec)
+
+mysql> DESC employees;
++-----------------+--------------+------+-----+---------+-------+
+| Field           | Type         | Null | Key | Default | Extra |
++-----------------+--------------+------+-----+---------+-------+
+| employee_no     | varchar(10)  | NO   | PRI | NULL    |       |
+| employee_name   | varchar(20)  | YES  |     | NULL    |       |
+| place           | varchar(100) | YES  |     | NULL    |       |
+| phone_no        | int          | YES  |     | NULL    |       |
+| department_name | varchar(100) | YES  |     | NULL    |       |
+| job_id          | int          | YES  |     | NULL    |       |
+| salary          | int          | YES  |     | NULL    |       |
++-----------------+--------------+------+-----+---------+-------+
+7 rows in set (0.00 sec)
+
+mysql> alter table employees add dept_no varchar(50);
+Query OK, 0 rows affected (0.08 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> DESC employees;
++-----------------+--------------+------+-----+---------+-------+
+| Field           | Type         | Null | Key | Default | Extra |
++-----------------+--------------+------+-----+---------+-------+
+| employee_no     | varchar(10)  | NO   | PRI | NULL    |       |
+| employee_name   | varchar(20)  | YES  |     | NULL    |       |
+| place           | varchar(100) | YES  |     | NULL    |       |
+| phone_no        | int          | YES  |     | NULL    |       |
+| department_name | varchar(100) | YES  |     | NULL    |       |
+| job_id          | int          | YES  |     | NULL    |       |
+| salary          | int          | YES  |     | NULL    |       |
+| dept_no         | varchar(50)  | YES  |     | NULL    |       |
++-----------------+--------------+------+-----+---------+-------+
+8 rows in set (0.01 sec)
+
+mysql> alter table employees add primary key to employee_no;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'to employee_no' at line 1
+mysql> alter table employees add primary key to dept_no;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'to dept_no' at line 1
+mysql> alter table employees add primary key dept_no;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 1
+mysql> alter table employees modify column dept_no primary key;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'primary key' at line 1
+mysql> alter table employees add primary key(dept_no);
+ERROR 1068 (42000): Multiple primary key defined
+mysql> create table departments(dept_no int(10),dept_name varchar(50),emp_name varchar(50);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 1
+mysql> create table departments(dept_no int(10),dept_name varchar(50),emp_name varchar(50));
+Query OK, 0 rows affected, 1 warning (0.05 sec)
+
+mysql> DESC departments;
++-----------+-------------+------+-----+---------+-------+
+| Field     | Type        | Null | Key | Default | Extra |
++-----------+-------------+------+-----+---------+-------+
+| dept_no   | int         | YES  |     | NULL    |       |
+| dept_name | varchar(50) | YES  |     | NULL    |       |
+| emp_name  | varchar(50) | YES  |     | NULL    |       |
++-----------+-------------+------+-----+---------+-------+
+3 rows in set (0.00 sec)
+
+mysql> alter table employee add primary key(employee_no);
+ERROR 1146 (42S02): Table 'tables.employee' doesn't exist
+mysql> alter table departments add primary key(dept_no);
+Query OK, 0 rows affected (0.08 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> alter table employees add foreign key(dept_no) REFERENCES departments(dept_no) on delete cascading;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'cascading' at line 1
+mysql> alter table employees add foreign key(dept_no) REFERENCES departments(dept_no);
+ERROR 3780 (HY000): Referencing column 'dept_no' and referenced column 'dept_no' in foreign key constraint 'employees_ibfk_1' are incompatible.
+mysql> alter table employees add foreign key (dept_no) REFERENCES departments(dept_no);
+ERROR 3780 (HY000): Referencing column 'dept_no' and referenced column 'dept_no' in foreign key constraint 'employees_ibfk_1' are incompatible.
+mysql> alter table employees add foreign key (dept_no) REFERENCES departments(dept_no);
+ERROR 3780 (HY000): Referencing column 'dept_no' and referenced column 'dept_no' in foreign key constraint 'employees_ibfk_1' are incompatible.
+mysql> alter table departments primary key(dept_no);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'primary key(dept_no)' at line 1
+mysql> alter table departments add primary key(dept_no);
+ERROR 1068 (42000): Multiple primary key defined
+mysql> desc departments;
++-----------+-------------+------+-----+---------+-------+
+| Field     | Type        | Null | Key | Default | Extra |
++-----------+-------------+------+-----+---------+-------+
+| dept_no   | int         | NO   | PRI | NULL    |       |
+| dept_name | varchar(50) | YES  |     | NULL    |       |
+| emp_name  | varchar(50) | YES  |     | NULL    |       |
++-----------+-------------+------+-----+---------+-------+
+3 rows in set (0.00 sec)
+
+mysql> alter table employees add foreign key (dept_no) REFERENCES departments(dept_no);
+ERROR 3780 (HY000): Referencing column 'dept_no' and referenced column 'dept_no' in foreign key constraint 'employees_ibfk_1' are incompatible.
+mysql> alter table departments modify dept_no varchar(50);
+Query OK, 0 rows affected (0.10 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> alter table employees add foreign key (dept_no) REFERENCES departments(dept_no);
+Query OK, 0 rows affected (0.09 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> DESC employees;
++-----------------+--------------+------+-----+---------+-------+
+| Field           | Type         | Null | Key | Default | Extra |
++-----------------+--------------+------+-----+---------+-------+
+| employee_no     | varchar(10)  | NO   | PRI | NULL    |       |
+| employee_name   | varchar(20)  | YES  |     | NULL    |       |
+| place           | varchar(100) | YES  |     | NULL    |       |
+| phone_no        | int          | YES  |     | NULL    |       |
+| department_name | varchar(100) | YES  |     | NULL    |       |
+| job_id          | int          | YES  |     | NULL    |       |
+| salary          | int          | YES  |     | NULL    |       |
+| dept_no         | varchar(50)  | YES  | MUL | NULL    |       |
++-----------------+--------------+------+-----+---------+-------+
+8 rows in set (0.00 sec)
+
+mysql> alter table order drop primary key;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'order drop primary key' at line 1
+mysql> alter table orders drop primary key;
+Query OK, 0 rows affected (0.10 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> alter table employees rename column place to designation;
+Query OK, 0 rows affected (0.04 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> DESC employees;
++-----------------+--------------+------+-----+---------+-------+
+| Field           | Type         | Null | Key | Default | Extra |
++-----------------+--------------+------+-----+---------+-------+
+| employee_no     | varchar(10)  | NO   | PRI | NULL    |       |
+| employee_name   | varchar(20)  | YES  |     | NULL    |       |
+| designation     | varchar(100) | YES  |     | NULL    |       |
+| phone_no        | int          | YES  |     | NULL    |       |
+| department_name | varchar(100) | YES  |     | NULL    |       |
+| job_id          | int          | YES  |     | NULL    |       |
+| salary          | int          | YES  |     | NULL    |       |
+| dept_no         | varchar(50)  | YES  | MUL | NULL    |       |
++-----------------+--------------+------+-----+---------+-------+
+8 rows in set (0.00 sec)
+
+mysql> alter table employees drop column job_id;
+Query OK, 0 rows affected (0.08 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> alter table employees drop column department_name;
+Query OK, 0 rows affected (0.09 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> DESC employees;
++---------------+--------------+------+-----+---------+-------+
+| Field         | Type         | Null | Key | Default | Extra |
++---------------+--------------+------+-----+---------+-------+
+| employee_no   | varchar(10)  | NO   | PRI | NULL    |       |
+| employee_name | varchar(20)  | YES  |     | NULL    |       |
+| designation   | varchar(100) | YES  |     | NULL    |       |
+| phone_no      | int          | YES  |     | NULL    |       |
+| salary        | int          | YES  |     | NULL    |       |
+| dept_no       | varchar(50)  | YES  | MUL | NULL    |       |
++---------------+--------------+------+-----+---------+-------+
+6 rows in set (0.00 sec)
+
+mysql> insert into employees values('101','anu','manager',7896543321,450000,dep01);
+ERROR 1054 (42S22): Unknown column 'dep01' in 'field list'
+mysql> 
+mysql> DESC departments;
++-----------+-------------+------+-----+---------+-------+
+| Field     | Type        | Null | Key | Default | Extra |
++-----------+-------------+------+-----+---------+-------+
+| dept_no   | varchar(50) | NO   | PRI | NULL    |       |
+| dept_name | varchar(50) | YES  |     | NULL    |       |
+| emp_name  | varchar(50) | YES  |     | NULL    |       |
++-----------+-------------+------+-----+---------+-------+
+3 rows in set (0.01 sec)
+
+mysql> alter table departments rename column dept_name to emp_no;
+Query OK, 0 rows affected (0.04 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> desc departments;
++----------+-------------+------+-----+---------+-------+
+| Field    | Type        | Null | Key | Default | Extra |
++----------+-------------+------+-----+---------+-------+
+| dept_no  | varchar(50) | NO   | PRI | NULL    |       |
+| emp_no   | varchar(50) | YES  |     | NULL    |       |
+| emp_name | varchar(50) | YES  |     | NULL    |       |
++----------+-------------+------+-----+---------+-------+
+3 rows in set (0.00 sec)
+
+mysql> alter table departments drop emp_no;
+Query OK, 0 rows affected (0.08 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> alter table departments drop emp_name;
+Query OK, 0 rows affected (0.06 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> insert values into departments(101);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'values into departments(101)' at line 1
+mysql> insert into departments values(101);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> insert into departments values(102);
+Query OK, 1 row affected (0.03 sec)
+
+mysql> insert into departments values(103),(104),(105),(106),(107),(108),(109),(110);
+Query OK, 8 rows affected (0.02 sec)
+Records: 8  Duplicates: 0  Warnings: 0
+
+mysql> select * from departments;
++---------+
+| dept_no |
++---------+
+| 101     |
+| 102     |
+| 103     |
+| 104     |
+| 105     |
+| 106     |
+| 107     |
+| 108     |
+| 109     |
+| 110     |
++---------+
+10 rows in set (0.00 sec)
+
+mysql> insert into employees values(1,'anu','manager',9876567563,450000,101);
+ERROR 1264 (22003): Out of range value for column 'phone_no' at row 1
+mysql> insert into employees values(1,'anu','manager',987656753,450000,101);
+Query OK, 1 row affected (0.02 sec)
+
+mysql> insert into employees values(1,'anu','manager',987656753,450000,101);
+ERROR 1062 (23000): Duplicate entry '1' for key 'employees.PRIMARY'
+mysql> insert into employees values(2,'anu','manager',987656753,450000,102);
+Query OK, 1 row affected (0.03 sec)
+
+mysql> insert into employees values(3,'anuss','analyst',987656753,450000,103);
+Query OK, 1 row affected (0.02 sec)
+
+mysql> insert into employees values(4,'avani','clerk',987656753,30000,104);
+Query OK, 1 row affected (0.03 sec)
+
+mysql> 
+mysql> insert into employees values(5,'avani','analyst',987656753,25000,105);
+Query OK, 1 row affected (0.02 sec)
+
+mysql> insert into employees values(6,'veena','analyst',987656753,20000,106);
+Query OK, 1 row affected (0.02 sec)
+
+mysql> insert into employees values(7,'manik','clerk',987656753,10000,107);
+Query OK, 1 row affected (0.02 sec)
+mysql> insert into employees values(7,'manik','clerk',987656753,10000,107);^C
+mysql> insert into employees values(8,'manik','analyst',987656753,30000,108);
+Query OK, 1 row affected (0.02 sec)
+
+mysql> insert into employees values(9,'vidhu','analyst',987656753,50000,109);
+Query OK, 1 row affected (0.02 sec)
+
+mysql> insert into employees values(10,'vidhu','clerk',987656753,5000,110);
+Query OK, 1 row affected (0.03 sec)
+
+mysql> select * from employees;
++-------------+---------------+-------------+-----------+--------+---------+
+| employee_no | employee_name | designation | phone_no  | salary | dept_no |
++-------------+---------------+-------------+-----------+--------+---------+
+| 1           | anu           | manager     | 987656753 | 450000 | 101     |
+| 10          | vidhu         | clerk       | 987656753 |   5000 | 110     |
+| 2           | anu           | manager     | 987656753 | 450000 | 102     |
+| 3           | anuss         | analyst     | 987656753 | 450000 | 103     |
+| 4           | avani         | clerk       | 987656753 |  30000 | 104     |
+| 5           | avani         | analyst     | 987656753 |  25000 | 105     |
+| 6           | veena         | analyst     | 987656753 |  20000 | 106     |
+| 7           | manik         | clerk       | 987656753 |  10000 | 107     |
+| 8           | manik         | analyst     | 987656753 |  30000 | 108     |
+| 9           | vidhu         | analyst     | 987656753 |  50000 | 109     |
++-------------+---------------+-------------+-----------+--------+---------+
+10 rows in set (0.00 sec)
+
+mysql> 
+
+
+mysql> insert into employees values(7,'manik','clerk',987656753,10000,107);^C
+mysql> 
+

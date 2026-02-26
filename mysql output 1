@@ -1,0 +1,85 @@
+mysql> create database college1;
+Query OK, 1 row affected (0.01 sec)
+
+mysql> use college1;
+Database changed
+mysql> create table student(rollno int(10)primary key,name varchar(50),dob date,place varchar(100),phone no int(10));
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'no int(10))' at line 1
+mysql> create table student(rollno int(10)primary key,name varchar(50),dob date,place varchar(100),phoneno int(10));
+Query OK, 0 rows affected, 2 warnings (0.05 sec)
+
+mysql> create table course(coursecode varchar(50),coursename varchar(100),credit int(10));
+Query OK, 0 rows affected, 1 warning (0.05 sec)
+
+mysql> show table;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 1
+mysql> show tables;
++--------------------+
+| Tables_in_college1 |
++--------------------+
+| course             |
+| student            |
++--------------------+
+2 rows in set (0.01 sec)
+
+mysql> DESC student;
++---------+--------------+------+-----+---------+-------+
+| Field   | Type         | Null | Key | Default | Extra |
++---------+--------------+------+-----+---------+-------+
+| rollno  | int          | NO   | PRI | NULL    |       |
+| name    | varchar(50)  | YES  |     | NULL    |       |
+| dob     | date         | YES  |     | NULL    |       |
+| place   | varchar(100) | YES  |     | NULL    |       |
+| phoneno | int          | YES  |     | NULL    |       |
++---------+--------------+------+-----+---------+-------+
+5 rows in set (0.00 sec)
+
+mysql> DESC COURSE;
+ERROR 1146 (42S02): Table 'college1.COURSE' doesn't exist
+mysql> DESC course;
++------------+--------------+------+-----+---------+-------+
+| Field      | Type         | Null | Key | Default | Extra |
++------------+--------------+------+-----+---------+-------+
+| coursecode | varchar(50)  | YES  |     | NULL    |       |
+| coursename | varchar(100) | YES  |     | NULL    |       |
+| credit     | int          | YES  |     | NULL    |       |
++------------+--------------+------+-----+---------+-------+
+3 rows in set (0.00 sec)
+
+mysql> alter table student drop phoneno;
+Query OK, 0 rows affected (0.08 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> alter table student add adhaarno varchar(50);
+Query OK, 0 rows affected (0.08 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> DESC student;
++----------+--------------+------+-----+---------+-------+
+| Field    | Type         | Null | Key | Default | Extra |
++----------+--------------+------+-----+---------+-------+
+| rollno   | int          | NO   | PRI | NULL    |       |
+| name     | varchar(50)  | YES  |     | NULL    |       |
+| dob      | date         | YES  |     | NULL    |       |
+| place    | varchar(100) | YES  |     | NULL    |       |
+| adhaarno | varchar(50)  | YES  |     | NULL    |       |
++----------+--------------+------+-----+---------+-------+
+5 rows in set (0.01 sec)
+
+mysql> alter table student modify column rollno varchar(20);
+Query OK, 0 rows affected (0.12 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> drop table student;
+Query OK, 0 rows affected (0.03 sec)
+
+mysql> drop table course;
+Query OK, 0 rows affected (0.03 sec)
+
+mysql> drop database college1;
+Query OK, 0 rows affected (0.04 sec)
+
+mysql> ~.^C
+mysql> 
+
+
