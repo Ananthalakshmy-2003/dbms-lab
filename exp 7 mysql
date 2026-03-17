@@ -1,0 +1,100 @@
+mysql> create database pro;
+Query OK, 1 row affected (0.03 sec)
+
+mysql> use pro;
+Database changed
+mysql> create table employee (emp_id int primary key,name varchar(50),salary int );
+Query OK, 0 rows affected (0.05 sec)
+
+insert into employee values (1,'Arun',25000),(2,'Rahul',32000),(3,'Meena',28000),(4,'Anu',40000);
+Query OK, 4 rows affected (0.02 sec)
+Records: 4  Duplicates: 0  Warnings: 0
+
+mysql> select * from employees;
+ERROR 1146 (42S02): Table 'pro.employees' doesn't exist
+mysql> select * from employee;
++--------+-------+--------+
+| emp_id | name  | salary |
++--------+-------+--------+
+|      1 | Arun  |  25000 |
+|      2 | Rahul |  32000 |
+|      3 | Meena |  28000 |
+|      4 | Anu   |  40000 |
++--------+-------+--------+
+4 rows in set (0.00 sec)
+
+create procedure increase_salary() begin  declare done int default 0;  declare e_id int;  declare sal int;  declare emp_cursor cursor for select emp_id,salary from employee;  declare continue handler for not found set done=1;  open emp_cursor;  read_loop:loop   fetch emp_cursor into e_id,sal;   if done then     leave read_loop;   end if;   if sal<30000 then     update employee      set salary =salary *1.10 where emp_id=e_id;   end if;  end loop;  close emp_cursor; end$$
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> delimiter ;
+mysql> call increase_salary();
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> select * from employee;
++--------+-------+--------+
+| emp_id | name  | salary |
++--------+-------+--------+
+|      1 | Arun  |  27500 |
+|      2 | Rahul |  32000 |
+|      3 | Meena |  30800 |
+|      4 | Anu   |  40000 |
++--------+-------+--------+
+4 rows in set (0.00 sec)
+
+mysql> create table electricity(cust_id int,name varchar(50),unit int,bill_amount int);
+Query OK, 0 rows affected (0.07 sec)
+
+insert into electricity values (1,'Ajay',120,NULL),(2,'Meera',250,NULL),(3,'Ravi',80,NULL);
+Query OK, 3 rows affected (0.01 sec)
+Records: 3  Duplicates: 0  Warnings: 0
+
+mysql> select * from electricity ;
++---------+-------+------+-------------+
+| cust_id | name  | unit | bill_amount |
++---------+-------+------+-------------+
+|       1 | Ajay  |  120 |        NULL |
+|       2 | Meera |  250 |        NULL |
+|       3 | Ravi  |   80 |        NULL |
++---------+-------+------+-------------+
+3 rows in set (0.00 sec)
+
+ 
+mysql> create procedure calculate_bill()
+    -> begin
+    ->   declare done int default 0;
+    ->   declare cid int;
+    ->   declare unit int;
+    ->   declare amount int;
+    -> 
+    ->   declare cur cursor for 
+    ->       select cust_id, units from electricity;
+    -> 
+    ->   declare continue handler for not found set done = 1;
+    -> 
+    ->   open cur;
+    -> 
+    ->   read_loop: loop
+    ->     fetch cur into cid, unit;
+    -> 
+    ->     if done then
+    ->       leave read_loop;
+    ->     end if;
+    -> 
+    ->     if unit <= 100 then
+    ->         set amount = unit * 3;
+    ->     elseif unit <= 200 then
+    ->         set amount = unit * 5;
+    ->     else
+    ->         set amount = unit * 7;
+    ->     end if;
+    -> 
+    ->     update electricity
+    ->     set bill_amount = amount
+    ->     where cust_id = cid;
+    -> 
+    ->   end loop;
+    -> 
+    ->   close cur;
+    -> end $$
+Query OK, 0 rows affected (0.03 sec)
+
